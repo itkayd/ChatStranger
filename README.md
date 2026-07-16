@@ -48,31 +48,25 @@ page, so it stays razor-sharp at any size with no extra downloads.
 
 No build tools, PHP, or databases are needed — these are plain static files.
 
-## Connecting the contact form (required — 5 minutes)
+## The contact form
 
 The form on `contact.html` uses **[Formspree](https://formspree.io)**, a free
-service that emails you form submissions and works on static hosting.
+service that emails form submissions and works on static hosting. It is
+**already connected** to this endpoint:
 
-1. Go to https://formspree.io and create a free account using
-   **admin@arkandcare.co.uk**.
-2. Click **New form**, name it (e.g. "Website contact"), and set the email it
-   should send submissions to.
-3. Formspree gives you a form endpoint like
-   `https://formspree.io/f/abcdwxyz` — copy the ID at the end.
-4. Open `contact.html` and find the clearly marked comment:
-   `CONTACT FORM — ACTION REQUIRED BY SITE OWNER`.
-5. On the line below it, replace **`YOUR_FORM_ID`** with your real ID:
+```
+https://formspree.io/f/maqrqdvk
+```
 
-   ```html
-   <form action="https://formspree.io/f/abcdwxyz" method="POST">
-   ```
+Submissions are emailed to the Formspree account owner and archived in the
+Formspree dashboard (the free plan includes 50 submissions/month). After
+deploying, send yourself a test message — the very first submission triggers
+a one-time confirmation email from Formspree; click **Confirm** and you're
+done.
 
-6. Re-upload `contact.html` and send yourself a test message.
-
-Until this is done, the form will not send — but the phone number and email
-links on the page work regardless. (If you prefer Web3Forms, swap the form
-`action` for `https://api.web3forms.com/submit` and add a hidden
-`access_key` input per their docs — the rest of the form can stay as is.)
+To change where submissions are sent, log in to Formspree — no website edit
+is needed. If you ever switch forms, update the `action` URL in
+`contact.html` (look for the `CONTACT FORM` comment).
 
 ## Editing content
 
