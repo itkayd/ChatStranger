@@ -1,7 +1,7 @@
 # Arkand Care — Website
 
 A static website for **Arkand Care Ltd** (arkandcare.co.uk): companionship and
-help at home across Hackney, Ealing & Barnet. Plain HTML, CSS and a little
+help at home across London and nearby areas. Plain HTML, CSS and a little
 vanilla JavaScript — no build step, no server code, no database. It is designed
 to be uploaded straight to Hostinger shared hosting.
 

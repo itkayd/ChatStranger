@@ -21,8 +21,10 @@
   --font-accent:  "Cormorant Garamond", Georgia, serif;
 
   --container: 1120px;
-  --radius: 10px;
-  --shadow: 0 2px 18px rgba(27, 48, 40, 0.08);
+  --radius: 16px;
+  --radius-lg: 22px;
+  --shadow: 0 1px 2px rgba(27, 48, 40, 0.05), 0 6px 24px rgba(27, 48, 40, 0.07);
+  --shadow-hover: 0 2px 4px rgba(27, 48, 40, 0.06), 0 14px 36px rgba(27, 48, 40, 0.13);
 }
 
 /* ---------- Reset & base ---------- */
@@ -100,8 +102,14 @@ select:focus-visible, textarea:focus-visible {
   border-radius: 999px;
   border: 2px solid transparent;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+              transform 0.2s ease, box-shadow 0.2s ease;
 }
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(27, 48, 40, 0.18);
+}
+.btn:active { transform: translateY(0); }
 
 .btn-gold {
   background: var(--gold);
@@ -132,8 +140,10 @@ select:focus-visible, textarea:focus-visible {
 
 /* ---------- Header ---------- */
 .site-header {
-  background: var(--cream);
-  border-bottom: 1px solid var(--parchment);
+  background: rgba(250, 248, 244, 0.88);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(27, 48, 40, 0.08);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -251,9 +261,12 @@ select:focus-visible, textarea:focus-visible {
   .site-nav a {
     border-bottom: none;
     padding: 0.25rem 0;
+    background: linear-gradient(var(--gold), var(--gold)) left bottom / 0 2px no-repeat;
+    transition: background-size 0.25s ease;
   }
+  .site-nav a:hover { background-size: 100% 2px; }
   .site-nav a[aria-current="page"] {
-    border-bottom: 2px solid var(--gold);
+    background-size: 100% 2px;
   }
 
   .header-call { display: inline-block; }
@@ -261,9 +274,12 @@ select:focus-visible, textarea:focus-visible {
 
 /* ---------- Hero ---------- */
 .hero {
-  background: var(--forest);
+  background:
+    radial-gradient(ellipse 70% 90% at 85% 10%, rgba(184, 137, 42, 0.16), transparent 60%),
+    radial-gradient(ellipse 60% 80% at 10% 100%, rgba(18, 32, 24, 0.85), transparent 70%),
+    linear-gradient(160deg, var(--forest) 0%, var(--forest-deep) 100%);
   color: var(--cream);
-  padding: 4rem 0 4.5rem;
+  padding: 5rem 0 5.5rem;
 }
 .hero h1 { color: var(--cream); }
 
@@ -299,9 +315,11 @@ select:focus-visible, textarea:focus-visible {
 
 /* Page hero (inner pages) */
 .page-hero {
-  background: var(--forest);
+  background:
+    radial-gradient(ellipse 70% 90% at 85% 0%, rgba(184, 137, 42, 0.14), transparent 60%),
+    linear-gradient(160deg, var(--forest) 0%, var(--forest-deep) 100%);
   color: var(--cream);
-  padding: 3rem 0 3.25rem;
+  padding: 3.5rem 0 3.75rem;
 }
 .page-hero h1 { color: var(--cream); margin-bottom: 0.35em; }
 .page-hero p {
@@ -336,8 +354,9 @@ select:focus-visible, textarea:focus-visible {
 .gold-rule {
   width: 64px;
   height: 3px;
-  background: var(--gold);
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
   border: none;
+  border-radius: 2px;
   margin: 0 0 1.5rem;
 }
 
@@ -355,6 +374,12 @@ select:focus-visible, textarea:focus-visible {
   border-radius: var(--radius);
   padding: 1.75rem 1.5rem;
   box-shadow: var(--shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(184, 137, 42, 0.45);
 }
 .section-parchment .card { background: var(--cream); }
 
@@ -465,6 +490,11 @@ select:focus-visible, textarea:focus-visible {
   border-radius: var(--radius);
   padding: 1.75rem 1.5rem;
   box-shadow: var(--shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.price-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
 }
 .price-amount {
   font-family: var(--font-heading);
@@ -648,8 +678,22 @@ select:focus-visible, textarea:focus-visible {
   border: 0;
 }
 
+/* ---------- Scroll-reveal (classes added by js/main.js) ---------- */
+/* Elements start visible by default; JS adds .reveal only when the browser
+   supports IntersectionObserver and the user allows motion. */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
 /* Respect users who prefer less motion */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
 }
