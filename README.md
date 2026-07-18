@@ -11,7 +11,7 @@ to be uploaded straight to Hostinger shared hosting.
 public_html/
 ├── index.html          Home
 ├── about.html          About — the Arkand story, values, honest CQC position
-├── services.html       Services & pricing (incl. "coming soon" section)
+├── services.html       Services (incl. "coming soon" section)
 ├── why-arkand.html     Reasons to choose Arkand
 ├── contact.html        Phone, email, contact form, areas served
 ├── join-us.html        Careers / recruitment page
