@@ -118,7 +118,7 @@
             <p class="form-note">Companionship and help at home are available now. Personal care is coming soon, subject to CQC registration. Not sure if we cover your area? Just ask — we're happy to help.</p>
           </div>
 
-          <div>
+          <div class="form-wrap">
             <h2>Send us a message</h2>
             <hr class="gold-rule">
             <p>Tell us a little about what would help, and we'll get back to you — usually the same day.</p>
@@ -126,11 +126,18 @@
             <!-- ============================================================
                  CONTACT FORM — powered by Formspree (https://formspree.io).
                  Works on static hosting with no server code. Submissions are
-                 emailed to the Formspree account owner and archived in the
-                 Formspree dashboard. To change where they go, log in to
-                 Formspree — the endpoint below stays the same. See README.md.
+                 sent to the Formspree account owner by email and archived in
+                 the Formspree dashboard.
+
+                 It is submitted with JavaScript (fetch) so the visitor stays
+                 on this page and sees the success message below — no redirect
+                 to the Formspree site. If JavaScript is off, it falls back to
+                 a normal submit and Formspree shows its own thank-you page.
+
+                 To change where submissions go, log in to Formspree — the
+                 endpoint below stays the same. See README.md.
                  ============================================================ -->
-            <form action="https://formspree.io/f/maqrqdvk" method="POST">
+            <form id="contact-form" action="https://formspree.io/f/maqrqdvk" method="POST">
 
               <div class="form-field">
                 <label for="name">Your name</label>
@@ -169,9 +176,38 @@
                 <input type="text" id="heard" name="heard_about_us">
               </div>
 
-              <button type="submit" class="btn btn-gold">Send message</button>
+              <!-- Honeypot: hidden from people, catches spam bots -->
+              <div class="hp-field" aria-hidden="true">
+                <label for="company">Company (leave blank)</label>
+                <input type="text" id="company" name="_gotcha" tabindex="-1" autocomplete="off">
+              </div>
+
+              <button type="submit" class="btn btn-gold btn-submit">
+                <span class="btn-label">Send message</span>
+                <span class="btn-spinner" aria-hidden="true"></span>
+              </button>
+              <p class="form-error" id="form-error" role="alert" hidden>Sorry — something went wrong sending your message. Please call us on <a href="tel:02080500095">020 8050 0095</a> or email <a href="mailto:team@arkandcare.co.uk">team@arkandcare.co.uk</a>.</p>
               <p class="form-note" style="margin-top: 1rem;">Prefer not to use the form? Call us on <a href="tel:02080500095">020 8050 0095</a> or email <a href="mailto:team@arkandcare.co.uk">team@arkandcare.co.uk</a>.</p>
             </form>
+
+            <!-- Animated success panel (revealed by JS after a successful send) -->
+            <div class="form-success" id="form-success" role="status" aria-live="polite" hidden>
+              <div class="success-mark" aria-hidden="true">
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                  <circle class="sm-ring" cx="60" cy="60" r="54"/>
+                  <path class="sm-check" d="M38 62 L54 78 L84 44"/>
+                </svg>
+                <span class="success-spark s1"></span>
+                <span class="success-spark s2"></span>
+                <span class="success-spark s3"></span>
+                <span class="success-spark s4"></span>
+                <span class="success-spark s5"></span>
+                <span class="success-spark s6"></span>
+              </div>
+              <h3>Thank you — your message is on its way.</h3>
+              <p>We've received your details and one of our team will be in touch soon, usually the same day. If it's urgent, you're always welcome to call us on <a href="tel:02080500095">020 8050 0095</a>.</p>
+              <p class="signoff" style="text-align:left;">Delivered with dignity.</p>
+            </div>
           </div>
 
         </div>

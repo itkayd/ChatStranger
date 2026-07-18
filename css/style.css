@@ -637,6 +637,132 @@ select:focus-visible, textarea:focus-visible {
   color: var(--taupe);
 }
 
+/* Honeypot — visually hidden but reachable by bots */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-error {
+  color: #8B2E2E;
+  background: #F7E9E4;
+  border: 1px solid #E0B9AC;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+.form-error a { color: #6E2323; }
+
+/* Submit button loading state */
+.btn-submit { display: inline-flex; align-items: center; gap: 0.6rem; }
+.btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(18, 32, 24, 0.3);
+  border-top-color: var(--forest-deep);
+  border-radius: 50%;
+  display: none;
+}
+.btn-submit.is-loading { pointer-events: none; opacity: 0.85; }
+.btn-submit.is-loading .btn-spinner { display: inline-block; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Animated success panel ---------- */
+.form-success {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 0%, rgba(184,137,42,0.12), transparent 65%),
+    var(--cream);
+  border: 1px solid rgba(184, 137, 42, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 2.75rem 2rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.form-success h3 { margin-bottom: 0.5rem; }
+.form-success p { max-width: 34em; margin-left: auto; margin-right: auto; }
+
+/* When shown, animate the whole panel in */
+.form-success.show {
+  animation: panelIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+.success-mark {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1.5rem;
+}
+.success-mark svg { width: 100%; height: 100%; overflow: visible; }
+
+.sm-ring {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 4;
+  stroke-dasharray: 339;
+  stroke-dashoffset: 339;
+}
+.sm-check {
+  fill: none;
+  stroke: var(--forest);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+}
+.form-success.show .sm-ring {
+  animation: drawRing 0.7s ease forwards;
+}
+.form-success.show .sm-check {
+  animation: drawCheck 0.5s ease 0.55s forwards;
+}
+@keyframes drawRing  { to { stroke-dashoffset: 0; } }
+@keyframes drawCheck { to { stroke-dashoffset: 0; } }
+
+/* Gold spark burst around the tick */
+.success-spark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px;
+  border-radius: 50%;
+  background: var(--gold-light);
+  opacity: 0;
+}
+.form-success.show .success-spark {
+  animation: spark 0.7s ease 0.9s forwards;
+}
+.success-spark.s1 { --tx: 0px;   --ty: -66px; }
+.success-spark.s2 { --tx: 58px;  --ty: -34px; }
+.success-spark.s3 { --tx: 58px;  --ty: 34px; }
+.success-spark.s4 { --tx: 0px;   --ty: 66px; }
+.success-spark.s5 { --tx: -58px; --ty: 34px; }
+.success-spark.s6 { --tx: -58px; --ty: -34px; }
+@keyframes spark {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.4); }
+  40%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-success.show,
+  .form-success.show .sm-ring,
+  .form-success.show .sm-check,
+  .form-success.show .success-spark { animation: none; }
+  .sm-ring, .sm-check { stroke-dashoffset: 0; }
+  .btn-submit.is-loading .btn-spinner { animation: none; }
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   background: var(--forest);
@@ -849,9 +975,9 @@ body.hero-ready .hero .hero-note    { transition-delay: 0.48s; }
 .btn:hover::after { transform: translateX(130%) skewX(-20deg); }
 
 /* ---------- Cards: 3D tilt + gold top sheen ---------- */
+.card-grid { perspective: 1100px; }
 .card {
   position: relative;
-  overflow: hidden;
   transform-style: preserve-3d;
   will-change: transform;
 }
@@ -860,6 +986,7 @@ body.hero-ready .hero .hero-note    { transition-delay: 0.48s; }
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
+  border-radius: var(--radius) var(--radius) 0 0;
   background: var(--gold-gradient);
   transform: scaleX(0);
   transform-origin: left;
@@ -871,19 +998,26 @@ body.hero-ready .hero .hero-note    { transition-delay: 0.48s; }
 .card .card-sheen {
   position: absolute;
   inset: 0;
+  border-radius: var(--radius);
   background: radial-gradient(circle at var(--mx, 50%) var(--my, 0%),
-              rgba(204, 160, 64, 0.14), transparent 45%);
+              rgba(204, 160, 64, 0.16), transparent 45%);
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
 .card:hover .card-sheen { opacity: 1; }
 
+/* 3D depth layers — only while the card is actively tilting (JS adds
+   .is-tilting), children lift to different Z depths and parallax under the
+   pointer, giving genuine dimensionality. At rest they sit flat. */
+.card.is-tilting h3        { transform: translateZ(28px); }
+.card.is-tilting > p       { transform: translateZ(16px); }
+.card.is-tilting .card-icon{ transform: translateZ(46px) scale(1.06); }
+
 .card-icon {
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s ease;
 }
 .card:hover .card-icon {
-  transform: translateY(-3px) scale(1.08);
   background: var(--gold);
   color: var(--cream);
 }
@@ -991,18 +1125,105 @@ body.hero-ready .hero .hero-note    { transition-delay: 0.48s; }
   body.js-on .hero .hero-note { opacity: 1; transform: none; }
 }
 
+/* ==========================================================================
+   APPLE-STYLE PINNED SCROLL SCENE — "The Threshold"
+   A tall section with a sticky stage; JS drives --p (0→1) as you scroll.
+   Falls back to a normal, fully legible panel with no JS / reduced motion.
+   ========================================================================== */
+/* Default (no JS / reduced motion): a calm, fully legible panel.
+   The tall sticky scroll effect only switches on when JS adds .pin-active. */
+.pin-scene {
+  position: relative;
+  background: linear-gradient(180deg, var(--forest) 0%, var(--forest-deep) 100%);
+  color: var(--cream);
+}
+.pin-sticky {
+  position: static;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 4.5rem 1.25rem;
+}
+
+.pin-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(70vw, 560px);
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0.08;
+  pointer-events: none;
+}
+.pin-mark svg { width: 100%; height: auto; }
+.pin-mark-bar { transform-box: fill-box; transform-origin: left center; }
+
+.pin-copy { position: relative; z-index: 1; max-width: 60rem; }
+.pin-head {
+  font-size: clamp(2rem, 6vw, 4.2rem);
+  color: var(--cream);
+  line-height: 1.15;
+  margin: 0.4em auto 0.5em;
+  max-width: 16em;
+}
+.pin-word { display: inline-block; margin-right: 0.28em; }
+.pin-sub {
+  font-size: 1.2rem;
+  color: var(--parchment);
+  max-width: 40em;
+  margin: 0 auto 1rem;
+}
+
+/* ---- Active (JS + motion allowed): the pinned, scroll-driven scene ---- */
+.pin-active {
+  min-height: 260vh;               /* scroll travel for the sticky stage */
+}
+.pin-active .pin-sticky {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+}
+.pin-active .pin-mark {
+  transform: translate(-50%, -50%) scale(calc(0.7 + var(--p, 0) * 0.55))
+             rotate(calc((var(--p, 0) - 0.5) * 6deg));
+  opacity: calc(0.05 + var(--p, 0) * 0.12);
+}
+.pin-active .pin-mark-bar { transform: scaleX(var(--p, 1)); }
+.pin-active .pin-copy .eyebrow { opacity: calc(0.35 + var(--p, 0)); }
+.pin-active .pin-word {
+  opacity: 0.16;
+  transition: opacity 0.15s linear, color 0.15s linear;
+}
+.pin-active .pin-word.lit { opacity: 1; }
+.pin-active .pin-word.gold { color: var(--gold-light); }
+.pin-active .pin-sub {
+  opacity: calc(0.2 + var(--p, 0) * 1.1);
+  transform: translateY(calc((1 - var(--p, 0)) * 20px));
+}
+.pin-active .pin-signoff { opacity: calc((var(--p, 0) - 0.4) * 2.2); }
+
+/* ---------- Parallax (JS sets --shift on [data-parallax]) ---------- */
+[data-parallax] { will-change: transform; transform: translate3d(0, var(--shift, 0px), 0); }
+
 /* ---------- Scroll-reveal (classes added by js/main.js) ---------- */
 /* Elements start visible by default; JS adds .reveal only when the browser
    supports IntersectionObserver and the user allows motion. */
 .reveal {
   opacity: 0;
   transform: translateY(18px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal.is-visible {
   opacity: 1;
   transform: none;
 }
+
+/* Directional / scale variants (set via data-reveal in the HTML) */
+[data-reveal="left"].reveal   { transform: translateX(-42px); }
+[data-reveal="right"].reveal  { transform: translateX(42px); }
+[data-reveal="scale"].reveal  { transform: scale(0.9); }
+[data-reveal="up-lg"].reveal  { transform: translateY(48px); }
+[data-reveal].reveal.is-visible { transform: none; }
 
 /* Respect users who prefer less motion */
 @media (prefers-reduced-motion: reduce) {
